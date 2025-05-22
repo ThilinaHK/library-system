@@ -6,6 +6,7 @@ import lombok.*;
 
 @Entity
 @Data
+@AllArgsConstructor
 //@Table(name = "book",
 //        uniqueConstraints = @UniqueConstraint(columnNames = "isbn"))
 public class Book {
