@@ -1,0 +1,8 @@
+# 🔍 Assumptions
+
+1. A book is uniquely identified by its id. Multiple copies can have the same ISBN.
+2. Same ISBN must always map to the same title and author.
+3. Borrower email must be unique.
+4. A book copy can only be borrowed by one person at a time.
+5. Borrowers can only return books they have borrowed.
+6. No authentication or authorization is implemented as it's not in the scope.
