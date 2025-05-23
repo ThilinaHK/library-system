@@ -5,20 +5,19 @@ import com.example.library_system.entity.Book;
 import com.example.library_system.mapper.BookMapper;
 import com.example.library_system.repository.BookRepository;
 import com.example.library_system.utill.ApiResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
 
     @Mock
@@ -30,59 +29,90 @@ class BookServiceImplTest {
     @InjectMocks
     private BookServiceImpl bookService;
 
+    private BookDTO bookDTO;
+    private Book book;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        bookDTO = new BookDTO();
+        bookDTO.setIsbn("123");
+        bookDTO.setTitle("Land");
+
+        book = new Book();
+        book.setIsbn("123");
+        book.setTitle("Land");
+    }
+
+//    @Test
+//    void save() {
+//    }
+
     @Test
-    void save() {
-        BookDTO bookDTO = new BookDTO(1, "123456789", "Effective Java", "Joshua Bloch", false);
-        Book book = new Book(1, "123456789", "Effective Java", "Joshua Bloch", false);
-
+    void testSave_Success() {
         when(bookMapper.EntityMapDto(bookDTO)).thenReturn(book);
         when(bookRepository.save(book)).thenReturn(book);
-
-        when(bookMapper.EntityMapDto(bookDTO)).thenReturn(book);
-        when(bookRepository.save(book)).thenReturn(book);
-
         ApiResponse response = bookService.save(bookDTO);
 
         assertTrue(response.isSuccess());
         assertEquals("Book saved successfully", response.getMessage());
+        assertNotNull(response.getTimestamp());
+
+        verify(bookMapper).EntityMapDto(bookDTO);
+        verify(bookRepository).save(book);
     }
 
     @Test
-    void findByAll() {
-        BookDTO bookDTO = new BookDTO(1, "123456789", "Effective Java", "Joshua Bloch", false);
-        Book book = new Book(1, "123456789", "Effective Java", "Joshua Bloch", false);
-
-        when(bookRepository.findAll()).thenReturn(List.of(book));
-        when(bookMapper.EntityToDtoList(List.of(book))).thenReturn(List.of(bookDTO));
-
+    void testSave_DuplicateISBN_ThrowsException() {
         when(bookMapper.EntityMapDto(bookDTO)).thenReturn(book);
-        doThrow(DataIntegrityViolationException.class).when(bookRepository).save(book);
+        doThrow(new DataIntegrityViolationException("Duplicate")).when(bookRepository).save(book);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             bookService.save(bookDTO);
         });
 
-        assertEquals("Duplicate ISBN: 123456789", exception.getMessage());
+        assertEquals("Duplicate ISBN: 123", exception.getMessage());
+
+        verify(bookMapper).EntityMapDto(bookDTO);
+        verify(bookRepository).save(book);
     }
 
     @Test
-    void shouldReturnAllBooks() {
-        List<Book> books = List.of(
-                new Book(1, "111111", "Clean Code", "Robert C. Martin", false),
-                new Book(2, "222222", "The Pragmatic Programmer", "Andy Hunt", false)
-        );
+    void testSave_OtherException_ReturnsErrorResponse() {
+        when(bookMapper.EntityMapDto(bookDTO)).thenReturn(book);
+        doThrow(new RuntimeException("DB error")).when(bookRepository).save(book);
 
-        List<BookDTO> bookDTOs = List.of(
-                new BookDTO(1, "111111", "Clean Code", "Robert C. Martin", false),
-                new BookDTO(2, "222222", "The Pragmatic Programmer", "Andy Hunt", false)
-        );
+        ApiResponse response = bookService.save(bookDTO);
 
-        when(bookRepository.findAll()).thenReturn(books);
-        when(bookMapper.EntityToDtoList(books)).thenReturn(bookDTOs);
+        assertFalse(response.isSuccess());
+        assertTrue(response.getMessage().contains("Book not saved Error : DB error"));
+        assertNotNull(response.getTimestamp());
+
+        verify(bookMapper).EntityMapDto(bookDTO);
+        verify(bookRepository).save(book);
+    }
+
+    @Test
+    void findByAll() {
+    }
+
+    @Test
+    void testFindByAll_ReturnsMappedList() {
+        List<Book> bookList = Arrays.asList(book);
+        List<BookDTO> dtoList = Arrays.asList(bookDTO);
+
+        when(bookRepository.findAll()).thenReturn(bookList);
+        when(bookMapper.EntityToDtoList(bookList)).thenReturn(dtoList);
 
         List<BookDTO> result = bookService.findByAll();
 
-        assertEquals(2, result.size());
-        assertEquals("Clean Code", result.get(0).getTitle());
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("123", result.get(0).getIsbn());
+        assertEquals("Land", result.get(0).getTitle());
+
+        verify(bookRepository, times(1)).findAll();
+        verify(bookMapper, times(1)).EntityToDtoList(bookList);
     }
 }
