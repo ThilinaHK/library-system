@@ -1,4 +1,4 @@
-package com.example.library_system.utill;
+package com.example.library_system.utill.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

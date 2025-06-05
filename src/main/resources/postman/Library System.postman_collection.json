@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "9e51868f-ff01-4d9a-85e3-9a30b4dde35a",
+		"name": "Library System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33446152",
+		"_collection_link": "https://teaboard-sys.postman.co/workspace/teaboard~7e0767bf-5e51-4ecc-8dd5-77451acde0da/collection/33446152-9e51868f-ff01-4d9a-85e3-9a30b4dde35a?action=share&source=collection_link&creator=33446152"
+	},
+	"item": [
+		{
+			"name": "book save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"isbn\": \"1233\",\r\n    \"title\": \"Land\",\r\n    \"author\": \"Gayan\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9005/api/v1/book/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9005",
+					"path": [
+						"api",
+						"v1",
+						"book",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "borrower save",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"name\": \"THILINAAAA\",\r\n    \"email\": \"THILINAAAA@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9005/api/v1/borrower/save",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9005",
+					"path": [
+						"api",
+						"v1",
+						"borrower",
+						"save"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find all Book",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9005/api/v1/book/findAll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9005",
+					"path": [
+						"api",
+						"v1",
+						"book",
+						"findAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find all Borrower",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9005/api/v1/borrower/findAll",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9005",
+					"path": [
+						"api",
+						"v1",
+						"borrower",
+						"findAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/borrow/{borrowerId}/{bookId}",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9005/api/v1/borrower/borrow/6/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9005",
+					"path": [
+						"api",
+						"v1",
+						"borrower",
+						"borrow",
+						"6",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Return borrow",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9005/api/v1/borrower/returnBorrow/6/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9005",
+					"path": [
+						"api",
+						"v1",
+						"borrower",
+						"returnBorrow",
+						"6",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

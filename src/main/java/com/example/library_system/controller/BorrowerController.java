@@ -1,10 +1,8 @@
 package com.example.library_system.controller;
 
-import com.example.library_system.dto.BookDTO;
 import com.example.library_system.dto.BorrowerDTO;
-import com.example.library_system.service.BookService;
 import com.example.library_system.service.BorrowerService;
-import com.example.library_system.utill.ApiResponse;
+import com.example.library_system.utill.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,7 @@ public class BorrowerController {
     private final BorrowerService borrowerService;
 
     @PostMapping("/save")
-    public ResponseEntity<ApiResponse> save(@Valid @RequestBody BorrowerDTO borrowerDTO) {
+    public ResponseEntity<ApiResponse> save(@RequestBody BorrowerDTO borrowerDTO) {
         return ResponseEntity.ok(borrowerService.save(borrowerDTO));
     }
 
@@ -30,12 +28,12 @@ public class BorrowerController {
     }
 
     @PostMapping("/borrow/{borrowerId}/{bookId}")
-    public ResponseEntity<String> borrowBook(@Valid @PathVariable int borrowerId, @Valid @PathVariable int bookId) {
+    public ResponseEntity<?> borrowBook(@PathVariable ("borrowerId") int borrowerId,@PathVariable ("bookId") int bookId) {
         return new ResponseEntity<>(borrowerService.borrowBook(borrowerId, bookId).getMessage(), HttpStatus.OK);
     }
 
     @PostMapping("/returnBorrow/{borrowerId}/{bookId}")
-    public ResponseEntity<String> returnBook(@Valid @PathVariable int borrowerId,@Valid @PathVariable int bookId) {
+    public ResponseEntity<?> returnBook(@PathVariable int borrowerId,@PathVariable int bookId) {
         return new ResponseEntity<>(borrowerService.returnBook(borrowerId, bookId).getMessage(), HttpStatus.OK);
     }
 }

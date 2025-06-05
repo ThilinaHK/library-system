@@ -1,11 +1,11 @@
 package com.example.library_system.service.Impl;
 
 import com.example.library_system.dto.BookDTO;
-import com.example.library_system.entity.Book;
 import com.example.library_system.mapper.BookMapper;
 import com.example.library_system.repository.BookRepository;
 import com.example.library_system.service.BookService;
-import com.example.library_system.utill.ApiResponse;
+import com.example.library_system.utill.common.ApiResponse;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
