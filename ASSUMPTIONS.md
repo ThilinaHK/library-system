@@ -8,7 +8,7 @@
 6. No authentication or authorization is implemented as it's not in the scope.
 7. http://localhost:63342/library-system/target/site/jacoco/index.html?_ijt=rkdcrgruk0amusj3o0le0jr2pp&_ij_reload=RELOAD_ON_SAVE
 8. http://localhost:9005/swagger-ui/index.html#/
-9.
+
 You can test all API endpoints using the provided Postman collection.
 1. Open Postman.
 2. Import the file: `postman/Library System.postman_collection.json`
